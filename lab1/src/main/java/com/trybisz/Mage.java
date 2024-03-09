@@ -1,15 +1,12 @@
 package com.trybisz;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Mage implements Comparable<Mage>{
-    private String name;
-    private int level;
-    private double power;
-    private Set<Mage> apprentices;
+    private final String name;
+    private final int level;
+    private final double power;
+    private final Set<Mage> apprentices;
 
     public Mage(String name, int level, double power, SortOrder apprenticeSortOrder) {
         this.name = name;
@@ -39,11 +36,19 @@ public class Mage implements Comparable<Mage>{
     }
 
     public Set<Mage> getApprentices() {
-        return apprentices;
+        return Collections.unmodifiableSet(apprentices);
     }
 
     public void addApprentice(Mage apprentice) {
         apprentices.add(apprentice);
+    }
+
+    public int countDescendants(){
+        int descendantsCount = apprentices.size();
+        for (Mage apprentice : apprentices){
+            descendantsCount+=apprentice.countDescendants();
+        }
+        return descendantsCount;
     }
 
     @Override
