@@ -21,6 +21,8 @@ public class Main {
             int index;
             try{
                 index = Integer.parseInt(command);
+                if(index<0)
+                    throw new NumberFormatException();
             }
             catch(NumberFormatException e){
                 if (command.equals("exit")) {
@@ -31,7 +33,7 @@ public class Main {
                     break;
                 }
                 else {
-                    System.out.println("Invalid command. Enter index of prime number to find or 'exit' to quit.");
+                    System.out.println("Invalid command. Enter non-negative index of prime number to find or 'exit' to quit.");
                     continue;
                 }
             }
