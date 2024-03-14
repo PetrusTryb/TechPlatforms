@@ -6,12 +6,14 @@ public class Main {
     public static void main(String[] args) {
         TaskQueue taskQueue = new TaskQueue();
         ResultsQueue resultsQueue = new ResultsQueue();
-        int threads = args.length > 0 ? Integer.parseInt(args[0]) : Runtime.getRuntime().availableProcessors();
+        int threads = args.length > 0 ? Integer.parseInt(args[0]) : 4;
         Thread[] primeFinderWorker = new Thread[threads];
         for (int i = 0; i < threads; i++) {
+            System.out.println("Starting Prime Worker #"+i);
             primeFinderWorker[i] = new Thread(new PrimeWorker(taskQueue, resultsQueue));
             primeFinderWorker[i].start();
         }
+        System.out.println("Starting Print Worker");
         Thread printWorker = new Thread(new PrintWorker(resultsQueue));
         printWorker.start();
         String command;
