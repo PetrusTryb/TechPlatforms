@@ -1,4 +1,18 @@
 package com.trybisz;
 
-public record Task(int id, int query) {
+
+
+public class Task {
+    private final int _id;
+    private final int _query;
+    public Task(int id, int query) {
+        this._id = id;
+        this._query = query;
+    }
+    public int id(){
+        return this._id;
+    }
+    public int query(){
+        return this._query;
+    }
 }
