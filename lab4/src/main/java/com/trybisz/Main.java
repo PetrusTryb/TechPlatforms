@@ -7,81 +7,83 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
-    static final int MAGES_COUNT = 64;
+    static final int MAGES_COUNT = 8;
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         Logger.getLogger("org.hibernate").setLevel(Level.WARNING);
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("lab4_db");
         EntityManager em = emf.createEntityManager();
         createTestData(em);
-        System.out.println("Pomyślnie utworzono testowe dane");
+        System.out.println("Pomyslnie utworzono testowe dane");
         int choice = -1;
         while(choice!=0){
             showMenu();
-            choice = input.nextInt();
-            switch(choice){
-                case 1:
-                    input.skip("\n");
-                    System.out.println(">Nazwa wieży: ");
-                    String name = input.nextLine();
-                    System.out.println(">Wysokość wieży: ");
-                    int height = input.nextInt();
-                    addTower(em, name, height);
-                    break;
-                case 2:
-                    input.skip("\n");
-                    System.out.println(">Nazwa maga: ");
-                    String mageName = input.nextLine();
-                    System.out.println(">Poziom maga: ");
-                    int mageLevel = input.nextInt();
-                    addMage(em, mageName, mageLevel);
-                    break;
-                case 3:
-                    input.skip("\n");
-                    System.out.println(">Nazwa wieży do usunięcia: ");
-                    String towerName = input.nextLine();
-                    deleteTower(em, towerName);
-                    break;
-                case 4:
-                    input.skip("\n");
-                    System.out.println(">Nazwa maga do usunięcia: ");
-                    String mageNameToDelete = input.nextLine();
-                    deleteMage(em, mageNameToDelete);
-                    break;
-                case 5:
-                    printData(em);
-                    break;
-                case 6:
-                    input.skip("\n");
-                    System.out.println(">Nazwa maga: ");
-                    String mageNameToBind = input.nextLine();
-                    System.out.println(">Nazwa wieży: ");
-                    String towerNameToBind = input.nextLine();
-                    bindMageToTower(em, mageNameToBind, towerNameToBind);
-                    break;
-                case 7:
-                    input.skip("\n");
-                    System.out.println(">Nazwa maga: ");
-                    String mageNameToUnbind = input.nextLine();
-                    unbindMageFromTower(em, mageNameToUnbind);
-                    break;
-                case 8:
-                    printHomelessMages(em);
-                    break;
+            try {
+                choice = input.nextInt();
+                switch (choice) {
+                    case 1 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa wiezy: ");
+                        String name = input.nextLine();
+                        System.out.println(">Wysokosc wiezy: ");
+                        int height = input.nextInt();
+                        addTower(em, name, height);
+                    }
+                    case 2 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa maga: ");
+                        String mageName = input.nextLine();
+                        System.out.println(">Poziom maga: ");
+                        int mageLevel = input.nextInt();
+                        addMage(em, mageName, mageLevel);
+                    }
+                    case 3 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa wiezy do usuniecia: ");
+                        String towerName = input.nextLine();
+                        deleteTower(em, towerName);
+                    }
+                    case 4 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa maga do usuniecia: ");
+                        String mageNameToDelete = input.nextLine();
+                        deleteMage(em, mageNameToDelete);
+                    }
+                    case 5 -> printData(em);
+                    case 6 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa maga: ");
+                        String mageNameToBind = input.nextLine();
+                        System.out.println(">Nazwa wiezy: ");
+                        String towerNameToBind = input.nextLine();
+                        bindMageToTower(em, mageNameToBind, towerNameToBind);
+                    }
+                    case 7 -> {
+                        input.skip("\n");
+                        System.out.println(">Nazwa maga: ");
+                        String mageNameToUnbind = input.nextLine();
+                        unbindMageFromTower(em, mageNameToUnbind);
+                    }
+                    case 8 -> printHomelessMages(em);
+                }
+            }catch (InputMismatchException e){
+                System.out.println("Nieprawidlowe dane wejsciowe");
+                input.nextLine();
             }
         }
         em.close();
         emf.close();
     }
     static void createTestData(EntityManager em){
-        Tower oldETI = new Tower("Stare ETI", 8);
-        Tower newETI = new Tower("Nowe ETI", 3);
+        Tower oldETI = new Tower("Wieza A", 8);
+        Tower newETI = new Tower("Wieza B", 3);
         EntityTransaction et = em.getTransaction();
         et.begin();
         em.persist(oldETI);
@@ -102,28 +104,28 @@ public class Main {
 
     static void showMenu(){
         System.out.println("------------------------------------------------------");
-        System.out.println("1. Dodaj wieżę");
+        System.out.println("1. Dodaj wieze");
         System.out.println("2. Dodaj maga");
-        System.out.println("3. Usuń wieżę");
-        System.out.println("4. Usuń maga");
-        System.out.println("5. Wyświetl wszystko");
-        System.out.println("6. Przypisz maga do wieży");
-        System.out.println("7. Wypisz maga z aktualnie zamieszkiwanej wieży");
-        System.out.println("8. Wyświetl magów bez przypisanej wieży");
-        System.out.println("0. Wyjdź");
+        System.out.println("3. Usun wieze");
+        System.out.println("4. Usun maga");
+        System.out.println("5. Wyswietl wszystko");
+        System.out.println("6. Przypisz maga do wiezy");
+        System.out.println("7. Wypisz maga z aktualnie zamieszkiwanej wiezy");
+        System.out.println("8. Wyswietl magow bez przypisanej wiezy");
+        System.out.println("0. Wyjdz");
         System.out.println("--------------------------------------------------------");
-        System.out.print(">Wybierz opcję: ");
+        System.out.print(">Wybierz opcje: ");
     }
 
     static void printData(EntityManager em){
-        System.out.println("Wieże:");
+        System.out.println("Wieze:");
         em.createQuery("SELECT t FROM Tower t", Tower.class).getResultList().forEach(System.out::println);
         System.out.println("Magowie:");
         em.createQuery("SELECT m FROM Mage m", Mage.class).getResultList().forEach(System.out::println);
     }
 
     static void printHomelessMages(EntityManager em){
-        System.out.println("Magowie bez przypisanej wieży:");
+        System.out.println("Magowie bez przypisanej wiezy:");
         em.createQuery("SELECT m FROM Mage m WHERE m.tower IS NULL", Mage.class).getResultList().forEach(System.out::println);
     }
 
@@ -162,7 +164,7 @@ public class Main {
     static void deleteTower(EntityManager em, String name){
         Tower tower = em.find(Tower.class, name);
         if(tower == null){
-            System.out.println("Nie ma takiej wieży");
+            System.out.println("Nie ma takiej wiezy");
             return;
         }
         EntityTransaction et = em.getTransaction();
@@ -198,7 +200,7 @@ public class Main {
             return;
         }
         if(tower == null){
-            System.out.println("Nie ma takiej wieży");
+            System.out.println("Nie ma takiej wiezy");
             return;
         }
         var previousTower = mage.getTower();
