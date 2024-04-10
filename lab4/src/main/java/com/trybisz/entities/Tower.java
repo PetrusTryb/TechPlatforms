@@ -30,10 +30,6 @@ public class Tower {
         return name;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
     public void bindMage(Mage mage) {
         if (mages.contains(mage))
             return;

@@ -30,13 +30,7 @@ public class Mage {
     public Tower getTower() {
         return tower;
     }
-    public String getName() {
-        return name;
-    }
 
-    public int getLevel() {
-        return level;
-    }
     @Override
     public String toString() {
         return "Mage{" +
