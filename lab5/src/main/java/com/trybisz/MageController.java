@@ -9,28 +9,24 @@ public class MageController {
 
     public String find(String name) {
         var result = repository.find(name);
-        if (result.isPresent()) {
-            return result.get().toString();
-        } else {
-            return "not found";
-        }
+        return result.map(Mage::toString).orElse("not found");
     }
 
     public String delete(String name) {
         try {
             repository.delete(name);
-            return "done";
         } catch (IllegalArgumentException e) {
             return "not found";
         }
+        return "done";
     }
 
     public String save(String name, String level) {
         try {
             repository.save(new Mage(name, Integer.parseInt(level)));
-            return "done";
         } catch (IllegalArgumentException e) {
             return "bad request";
         }
+        return "done";
     }
 }

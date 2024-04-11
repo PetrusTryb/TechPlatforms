@@ -6,27 +6,23 @@ import java.util.Optional;
 public class MageRepository {
     private final Collection<Mage> collection;
 
-    public MageRepository() {
-        this.collection = new ArrayList<>();
-    }
-
     public MageRepository(Collection<Mage> collection) {
         this.collection = new ArrayList<>(collection);
     }
     public Optional<Mage> find(String name) {
         return this.collection.stream()
-            .filter(mage -> mage.getName().equals(name))
+            .filter(mage -> mage.name().equals(name))
             .findFirst().or(Optional::empty);
     }
     public void delete(String name) {
-        boolean success = this.collection.removeIf(mage -> mage.getName().equals(name));
+        boolean success = this.collection.removeIf(mage -> mage.name().equals(name));
         if (!success) {
             throw new IllegalArgumentException("Mage not found: " + name);
         }
     }
     public void save(Mage mage) {
-        if(this.collection.stream().anyMatch(m -> m.getName().equals(mage.getName()))) {
-            throw new IllegalArgumentException("Mage already exists: " + mage.getName());
+        if(this.collection.stream().anyMatch(m -> m.name().equals(mage.name()))) {
+            throw new IllegalArgumentException("Mage already exists: " + mage.name());
         }
         this.collection.add(mage);
     }
