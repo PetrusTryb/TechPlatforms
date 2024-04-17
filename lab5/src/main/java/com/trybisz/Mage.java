@@ -1,20 +1,6 @@
 package com.trybisz;
-public class Mage {
-    private final String name;
-    private final int level;
 
-    public Mage(String name, int level) {
-        this.name = name;
-        this.level = level;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getLevel() {
-        return level;
-    }
+public record Mage(String name, int level) {
 
     @Override
     public String toString() {
