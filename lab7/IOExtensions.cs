@@ -5,14 +5,14 @@ namespace MyProject
     internal static class IOExtensions
     {
 
-        public static FileInfo FindOldestElement( this DirectoryInfo directoryInfo ) {
+        public static FileInfo? FindOldestElement( this DirectoryInfo directoryInfo ) {
             var directiories = directoryInfo.GetDirectories();
-            var files = directoryInfo.GetFiles();
+            var files = directoryInfo.GetFiles().OrderBy(f => f.CreationTime );
             var oldestElement = files.FirstOrDefault();
             foreach (DirectoryInfo subDirectory in directiories)
             {
                 var oldestFileInSubDirectory = subDirectory.FindOldestElement();
-                if (oldestElement == null || oldestFileInSubDirectory.LastWriteTime < oldestElement.LastWriteTime)
+                if (oldestElement == null || oldestFileInSubDirectory?.CreationTime < oldestElement.CreationTime)
                 {
                     oldestElement = oldestFileInSubDirectory;
                 }
